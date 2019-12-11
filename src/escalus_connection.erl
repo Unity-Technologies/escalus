@@ -8,6 +8,7 @@
 -include_lib("exml/include/exml_stream.hrl").
 -include("escalus.hrl").
 
+
 %% High-level API
 -export([start/1, start/2,
          stop/1]).
@@ -40,7 +41,7 @@
 %% Private
 -export([connection_step/2]).
 
--define(TIMEOUT, 1000).
+-define(TIMEOUT, application:get_env(escalus, connection_timeout, 15000)).
 
 %%%===================================================================
 %%% Behaviour callback
