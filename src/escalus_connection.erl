@@ -113,7 +113,7 @@ start(Props0, Steps) ->
             {error, Error}
     end.
 
-connection_step(Step, {Conn, Props, Features}) ->
+connection_step(Step, {Conn = #client{socket = Socket}, Props, Features}) ->
     try
         case Step of
             {Mod, Fun} ->
@@ -123,8 +123,9 @@ connection_step(Step, {Conn, Props, Features}) ->
         end
     catch
         Error ->
+            NetworkInfo = inet:sockname(Socket),
             (Conn#client.module):stop(Conn),
-            throw({connection_step_failed, {Step, Conn, Props, Features}, Error})
+            throw({connection_step_failed, {Step, Conn, Props, Features, NetworkInfo}, Error})
     end.
 
 %% By default use predefined connection steps from escalus_session.
