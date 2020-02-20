@@ -139,8 +139,7 @@ recv(#client{rcv_pid = Pid}) ->
 %%%===================================================================
 
 init([Args, Owner]) ->
-    Host = proplists:get_value(host, Args, <<"localhost">>),
-    Port = proplists:get_value(port, Args, 5222),
+    Host, Port = get_host_port(Args),
 
     Address = host_to_inet(Host),
     EventClient = proplists:get_value(event_client, Args),
@@ -269,6 +268,18 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Helpers
 %%%===================================================================
+% Get host and port from Args proplist
+% if host value is :-separated list, use host and port from that,
+% else use default port in Args
+% returns {Host, Port} as binary, integer.
+get_host_port(Args) ->
+    Host = proplists:get_value(host, Args, <<"localhost">>),
+    Port = proplists:get_value(port, Args, 5222),
+    case string:split(binary_to_list(Host), ":") of
+        [_Host1] -> {Host, Port};
+        [Host1, Port1] -> {list_to_binary(Host1), list_to_integer(Port1)}
+    end.
+
 handle_data(Socket, Data, #state{parser = Parser,
                                  socket = Socket,
                                  compress = Compress,
