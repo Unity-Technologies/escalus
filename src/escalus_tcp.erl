@@ -139,7 +139,7 @@ recv(#client{rcv_pid = Pid}) ->
 %%%===================================================================
 
 init([Args, Owner]) ->
-    Host, Port = get_host_port(Args),
+    {Host, Port} = get_host_port(Args),
 
     Address = host_to_inet(Host),
     EventClient = proplists:get_value(event_client, Args),
