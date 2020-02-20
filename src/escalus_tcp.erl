@@ -277,7 +277,7 @@ get_host_port(Args) ->
     Port = proplists:get_value(port, Args, 5222),
     case binary:split(Host, <<":">>) of
         [_Host1] -> {Host, Port};
-        [Host1, Port1] -> {Host1, list_to_integer(binary_to_list(Port1)}
+        [Host1, Port1] -> {Host1, list_to_integer(binary_to_list(Port1))}
     end.
 
 handle_data(Socket, Data, #state{parser = Parser,
