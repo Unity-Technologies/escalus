@@ -275,7 +275,7 @@ code_change(_OldVsn, State, _Extra) ->
 get_host_port(Args) ->
     Host = proplists:get_value(host, Args, <<"localhost">>),
     Port = proplists:get_value(port, Args, 5222),
-    case string:split(binary_to_list(Host), ":") of
+    case binary:split(binary_to_list(Host), <<":">>) of
         [_Host1] -> {Host, Port};
         [Host1, Port1] -> {list_to_binary(Host1), list_to_integer(Port1)}
     end.
